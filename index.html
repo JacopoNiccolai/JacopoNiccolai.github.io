@@ -3,181 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jacopo Niccolai - Portfolio</title>
+    <title>Jacopo Niccolai</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
-        :root {
-            --primary-color: #007BFF;
-            --background-color: #f4f7f6;
-            --text-color: #333;
-            --card-background: #fff;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: var(--background-color);
-            color: var(--text-color);
-            line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f2f5;
+            color: #333;
         }
-
-        .container {
-            max-width: 900px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background-color: var(--card-background);
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-        }
-
-        header {
+        .profile-card {
             text-align: center;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid #ddd;
+            background: #fff;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
         }
-
-        header h1 {
+        .profile-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #007bff;
+            margin-bottom: 1.5rem;
+        }
+        h1 {
+            font-size: 2rem;
             margin: 0;
-            font-size: 2.5rem;
-            color: var(--primary-color);
+            font-weight: 700;
         }
-
-        header h2 {
-            margin: 0.5rem 0 1rem;
-            font-size: 1.2rem;
-            color: #555;
+        h2 {
+            font-size: 1rem;
+            margin: 0.5rem 0 1.5rem;
+            color: #666;
+            font-weight: 400;
         }
-
-        .contact-info {
-            font-size: 0.9rem;
-            color: #777;
+        .social-links {
             display: flex;
             justify-content: center;
             gap: 1.5rem;
-            flex-wrap: wrap;
         }
-        
-        .contact-info a {
-            color: #777;
-            text-decoration: none;
+        .social-links a {
+            color: #555;
+            font-size: 1.8rem;
+            transition: color 0.3s ease-in-out;
         }
-        
-        .contact-info a:hover {
-            text-decoration: underline;
-        }
-
-        section {
-            margin-top: 2rem;
-        }
-
-        section h3 {
-            border-left: 4px solid var(--primary-color);
-            padding-left: 10px;
-            margin-bottom: 1rem;
-            font-size: 1.5rem;
-        }
-
-        .education, .experience, .projects {
-            border-bottom: 1px solid #eee;
-            padding-bottom: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .education h4, .experience h4, .projects h4 {
-            margin: 0;
-            font-size: 1.1rem;
-            color: var(--primary-color);
-        }
-        
-        .education p, .experience p, .projects p {
-            margin: 0.2rem 0;
-        }
-        
-        .education .dates, .experience .dates {
-            font-size: 0.9rem;
-            color: #777;
-        }
-
-        .project-list, .skills-list {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .project-list li, .skills-list li {
-            background-color: #e9ecef;
-            padding: 0.5rem 1rem;
-            margin-bottom: 0.5rem;
-            border-radius: 5px;
+        .social-links a:hover {
+            color: #007bff;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Jacopo Niccolai</h1>
-            <h2>MSc student in Artificial Intelligence and Data Engineering</h2>
-            <div class="contact-info">
-                <span>+39 3496795411</span>
-                <span>jacoponiccolai99@gmail.com</span>
-                <a href="https://linkedin.com/in/jacoponiccolai" target="_blank">LinkedIn</a>
-            </div>
-        </header>
-
-        <section class="about">
-            <h3>About Me</h3>
-            <p>I am a detail-oriented and creative problem-solver with a strong background in Computer Engineering and a passion for technological evolution. My expertise lies in areas such as Data Mining, Machine Learning, and Deep Learning, with a focus on applying these skills to real-world projects. I am a team-player with strong communication and leadership skills, always curious to explore new cultures and challenges.</p>
-        </section>
-
-        <section class="education">
-            <h3>Education</h3>
-            <div>
-                <h4>University of Pisa</h4>
-                <p>Master of Science in Artificial Intelligence and Data Engineering</p>
-                <p class="dates">2023 - present</p>
-            </div>
-            <br>
-            <div>
-                <h4>University of Pisa</h4>
-                <p>Bachelor's degree in Computer Engineering</p>
-                <p class="dates">2018 - 2023</p>
-                <p>Thesis: "Implementation and comparison of explainable machine learning approaches for the analysis of urban mobility"</p>
-            </div>
-        </section>
-
-        <section class="experience">
-            <h3>Experience</h3>
-            <div>
-                <h4>Vice President and Tutor - Scienza Ludica</h4>
-                <p class="dates">2013 - present</p>
-                <p>Delivered workshops and courses for students and teachers focused on robotics, programming, and electronics. Organized and managed events, competitions, and STEM initiatives.</p>
-            </div>
-        </section>
+    <div class="profile-card">
+        <img class="profile-photo" src="https://via.placeholder.com/150" alt="Your Photo">
         
-        <section class="projects">
-            <h3>Notable Projects</h3>
-            <ul class="project-list">
-                <li>
-                    <h4>Interactive RAG using LLMs (Retrieval-Augmented Generation)</h4>
-                    <p>Developed an interactive pipeline for generating quizzes from study materials using Python and LLMs.</p>
-                </li>
-                <li>
-                    <h4>AirBnB-like platform for students</h4>
-                    <p>Designed and implemented a platform for students to find and book accommodation, focusing on usability and secure transactions.</p>
-                </li>
-            </ul>
-        </section>
-
-        <section class="skills">
-            <h3>Technical Skills</h3>
-            <ul class="skills-list">
-                <li>Data Mining, Machine Learning, Deep Learning</li>
-                <li>Python, C/C++, Java, SQL</li>
-                <li>Distributed Databases, Cloud Computing, IoT</li>
-                <li>Software Engineering, Web Programming</li>
-            </ul>
-        </section>
-
+        <h1>Jacopo Niccolai</h1>
+        <h2>MSc student in Artificial Intelligence and Data Engineering</h2>
+        
+        <div class="social-links">
+            <a href="https://github.com/your-username" target="_blank" title="GitHub">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="https://linkedin.com/in/jacoponiccolai" target="_blank" title="LinkedIn">
+                <i class="fab fa-linkedin"></i>
+            </a>
+            <a href="mailto:jacoponiccolai99@gmail.com" title="Email">
+                <i class="fas fa-envelope"></i>
+            </a>
+        </div>
     </div>
 </body>
 </html>

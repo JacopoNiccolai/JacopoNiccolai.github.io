@@ -48,7 +48,7 @@
             height: 180px;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid aquamarine;
+            border: 4px solid rgb(0, 255, 255); /* Updated color to match particles */
             margin-bottom: 1.5rem;
         }
         h1 {
@@ -74,7 +74,7 @@
             transition: color 0.3s ease-in-out;
         }
         .social-links a:hover {
-            color: aquamarine;
+            color: rgb(0, 255, 255); /* Optional: Changed hover color for social icons */
         }
     </style>
 </head>
@@ -131,8 +131,7 @@
                 if (this.y > canvas.height || this.y < 0) this.speedY = -this.speedY;
             }
             draw() {
-                // Changed fillStyle to use aquamarine with transparency
-                ctx.fillStyle = 'rgba(127, 255, 212, 0.8)';
+                ctx.fillStyle = 'rgba(0, 255, 255, 0.8)';
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
@@ -157,8 +156,7 @@
                     );
                     if (distance < maxDistance) {
                         opacity = 1 - (distance / maxDistance);
-                        // Changed strokeStyle to use aquamarine with dynamic opacity
-                        ctx.strokeStyle = `rgba(127, 255, 212, ${opacity})`;
+                        ctx.strokeStyle = `rgba(0, 255, 255, ${opacity})`;
                         ctx.lineWidth = 0.5;
                         ctx.beginPath();
                         ctx.moveTo(particles[a].x, particles[a].y);

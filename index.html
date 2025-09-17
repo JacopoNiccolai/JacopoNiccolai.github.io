@@ -17,65 +17,51 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #f0f2f5;
+            background-color: #0d1117; /* Darker background for contrast */
             color: #333;
-            overflow: hidden; /* Hide overflow for the background animation */
-            position: relative; /* Needed for absolute positioning of background */
+            overflow: hidden;
+            position: relative;
         }
 
-        /* Neural Network Background Animation */
-        body::before {
-            content: '';
+        /* Canvas for the particle animation */
+        #particle-canvas {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: 
-                radial-gradient(circle at 10% 20%, rgba(0,255,255,0.1) 0%, rgba(0,255,255,0) 20%),
-                radial-gradient(circle at 90% 80%, rgba(0,255,255,0.1) 0%, rgba(0,255,255,0) 20%),
-                radial-gradient(circle at 30% 70%, rgba(0,255,255,0.1) 0%, rgba(0,255,255,0) 20%),
-                radial-gradient(circle at 70% 30%, rgba(0,255,255,0.1) 0%, rgba(0,255,255,0) 20%),
-                linear-gradient(135deg, rgba(0,191,255,0.05) 0%, rgba(0,191,255,0.0) 50%); /* Subtle blue gradient */
-            background-size: 200% 200%;
-            animation: neuralBackground 30s ease infinite;
-            z-index: -1; /* Ensure it stays behind the card */
-        }
-
-        @keyframes neuralBackground {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            z-index: -1;
         }
 
         .profile-card {
             text-align: center;
-            background: #fff;
+            background: rgba(255, 255, 255, 0.95); /* Semi-transparent white card */
             padding: 2.5rem;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             width: 90%;
             max-width: 400px;
-            position: relative; /* To make sure card is on top of background */
-            z-index: 1; /* Bring card to front */
+            position: relative;
+            z-index: 1;
         }
         .profile-photo {
-            width: 180px; /* Bigger photo */
-            height: 180px; /* Bigger photo */
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid aquamarine; /* Acquamarine border */
+            border: 4px solid aquamarine;
             margin-bottom: 1.5rem;
         }
         h1 {
             font-size: 2rem;
             margin: 0;
             font-weight: 700;
+            color: #2c3e50;
         }
         h2 {
             font-size: 1rem;
             margin: 0.5rem 0 1.5rem;
-            color: #666;
+            color: #7f8c8d;
             font-weight: 400;
         }
         .social-links {
@@ -89,11 +75,14 @@
             transition: color 0.3s ease-in-out;
         }
         .social-links a:hover {
-            color: #007bff;
+            color: aquamarine;
         }
     </style>
 </head>
 <body>
+
+    <canvas id="particle-canvas"></canvas>
+
     <div class="profile-card">
         <img class="profile-photo" src="images/profile4.jpg" alt="Your Photo">
         
@@ -112,5 +101,93 @@
             </a>
         </div>
     </div>
+
+    <script>
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let particles = [];
+        const numParticles = 100;
+        const maxDistance = 120; // Max distance for lines between particles
+
+        // Set canvas size
+        function setCanvasSize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        setCanvasSize();
+        window.addEventListener('resize', setCanvasSize);
+
+        // Particle class
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+            }
+            // Update particle position
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                // Bounce off walls
+                if (this.x > canvas.width || this.x < 0) this.speedX = -this.speedX;
+                if (this.y > canvas.height || this.y < 0) this.speedY = -this.speedY;
+            }
+            // Draw the particle
+            draw() {
+                ctx.fillStyle = 'rgba(0, 255, 255, 0.8)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Initialize particles
+        function init() {
+            particles = [];
+            for (let i = 0; i < numParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+        init();
+
+        // Connect particles with lines
+        function connect() {
+            let opacity = 1;
+            for (let a = 0; a < particles.length; a++) {
+                for (let b = a; b < particles.length; b++) {
+                    const distance = Math.sqrt(
+                        Math.pow(particles[a].x - particles[b].x, 2) + 
+                        Math.pow(particles[a].y - particles[b].y, 2)
+                    );
+                    if (distance < maxDistance) {
+                        opacity = 1 - (distance / maxDistance);
+                        ctx.strokeStyle = `rgba(0, 255, 255, ${opacity})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[a].x, particles[a].y);
+                        ctx.lineTo(particles[b].x, particles[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        // Animation loop
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            connect();
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
 </body>
 </html>

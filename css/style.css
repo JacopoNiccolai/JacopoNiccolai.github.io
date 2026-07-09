@@ -158,6 +158,10 @@ h1, h2, h3 { line-height: 1.2; }
     height: 1.45rem;
     display: block;
 }
+.icon-duolingo {
+    width: 1.8rem;
+    height: 1.8rem;
+}
 .social-links a:hover {
     color: var(--accent);
     transform: translateY(-3px);

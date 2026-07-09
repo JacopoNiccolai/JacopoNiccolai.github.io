@@ -6,7 +6,7 @@
     var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     /* ------------------------------------------------------------
-       Particle constellation — monochrome, cyan near the cursor
+       Particle constellation: monochrome, cyan near the cursor
        ------------------------------------------------------------ */
     var canvas = document.getElementById('particle-canvas');
     var ctx = canvas.getContext('2d');
@@ -147,7 +147,7 @@
     if (!reducedMotion) animate();
 
     /* ------------------------------------------------------------
-       Discoveries — badges, eggs, HUD, toasts
+       Discoveries: badges, eggs, HUD, toasts
        ------------------------------------------------------------ */
     var BADGES = [
         { id: 'experience', name: 'Career path traced', hint: 'Read through the experience section' },
@@ -216,7 +216,7 @@
         void hud.offsetWidth; /* restart animation */
         hud.classList.add('pulse');
         if (count() === BADGES.length) {
-            showToast('★ Full explorer — you found everything. The particles salute you!');
+            showToast('★ Full explorer: you found everything. The particles salute you!');
             celebrate();
         } else {
             showToast('★ Discovery: ' + badge.name + ' (' + count() + '/' + BADGES.length + ')');
@@ -237,19 +237,40 @@
 
     renderHud();
 
-    /* section badges + scroll reveal */
-    var revealTargets = document.querySelectorAll('.section, .footer');
+    /* staggered scroll reveal: each card/entry slides in as it enters the viewport */
+    var revealTargets = document.querySelectorAll(
+        '.section .eyebrow, .section .tick, .brand-card, .timeline li, ' +
+        '.edu-card, .project-card, .highlight-list li, .footer > *'
+    );
+    revealTargets.forEach(function (el) {
+        el.classList.add('rv');
+        // stagger siblings that enter together (cards in a grid, list items)
+        var siblings = el.parentElement ? el.parentElement.children : [];
+        var idx = Array.prototype.indexOf.call(siblings, el);
+        el.style.transitionDelay = (idx % 4) * 90 + 'ms';
+    });
+
     if ('IntersectionObserver' in window) {
-        var observer = new IntersectionObserver(function (entries) {
+        var revealObserver = new IntersectionObserver(function (entries) {
             entries.forEach(function (entry) {
                 if (!entry.isIntersecting) return;
                 entry.target.classList.add('revealed');
-                var badge = entry.target.getAttribute('data-badge');
-                if (badge) unlock(badge);
-                observer.unobserve(entry.target);
+                revealObserver.unobserve(entry.target);
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+        revealTargets.forEach(function (el) { revealObserver.observe(el); });
+
+        /* section badges */
+        var badgeObserver = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (!entry.isIntersecting) return;
+                unlock(entry.target.getAttribute('data-badge'));
+                badgeObserver.unobserve(entry.target);
             });
         }, { threshold: 0.25 });
-        revealTargets.forEach(function (el) { observer.observe(el); });
+        document.querySelectorAll('[data-badge]').forEach(function (el) {
+            badgeObserver.observe(el);
+        });
     } else {
         revealTargets.forEach(function (el) { el.classList.add('revealed'); });
     }

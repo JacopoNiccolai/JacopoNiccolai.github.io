@@ -3,192 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jacopo Niccolai</title>
+    <title>Jacopo Niccolai — Machine Learning Engineer</title>
+    <meta name="description" content="Jacopo Niccolai — Machine Learning Engineer at tuboolar, STEAM educator and Vice President of Scienza Ludica. Computer vision, GenAI and robotics.">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Montserrat', sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #0d1117;
-            color: #333;
-            overflow: hidden;
-            position: relative;
-        }
-
-        #particle-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
-
-        .profile-card {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 2.5rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            width: 90%;
-            max-width: 400px;
-            position: relative;
-            z-index: 1;
-        }
-        .profile-photo {
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: none; /* Border removed */
-            margin-bottom: 1.5rem;
-        }
-        h1 {
-            font-size: 2rem;
-            margin: 0;
-            font-weight: 700;
-            color: #2c3e50;
-        }
-        h2 {
-            font-size: 1rem;
-            margin: 0.5rem 0 1.5rem;
-            color: #7f8c8d;
-            font-weight: 400;
-        }
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-        }
-        .social-links a {
-            color: #555;
-            font-size: 1.8rem;
-            transition: color 0.3s ease-in-out;
-        }
-        .social-links a:hover {
-            color: rgb(0, 255, 255);
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <canvas id="particle-canvas"></canvas>
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
 
-    <div class="profile-card">
-        <img class="profile-photo" src="images/profile4.jpg" alt="Your Photo">
-        
-        <h1>Jacopo Niccolai</h1>
-        <h2>MSc student in Artificial Intelligence and Data Engineering @ University of Pisa</h2>
-        
-        <div class="social-links">
-            <a href="https://github.com/JacopoNiccolai" target="_blank" title="GitHub">
-                <i class="fab fa-github"></i>
-            </a>
-            <a href="https://linkedin.com/in/jacoponiccolai" target="_blank" title="LinkedIn">
-                <i class="fab fa-linkedin"></i>
-            </a>
-            <a href="mailto:jacoponiccolai13@gmail.com" title="Email">
-                <i class="fas fa-envelope"></i>
-            </a>
-            <!--<a href="docs/NiccolaiJacopo_CV.pdf" target="_blank" title="Curriculum Vitae">
-                <i class="fas fa-file-pdf"></i>
-            </a>-->
-        </div>
+    <button id="hud" class="hud" aria-expanded="false" aria-controls="hud-panel" title="Discoveries">
+        <span class="hud-star" aria-hidden="true">&#9733;</span>
+        <span id="hud-count">0/7</span>
+    </button>
+    <div id="hud-panel" class="hud-panel" hidden>
+        <p class="hud-title">Discoveries</p>
+        <ul id="badge-list"></ul>
     </div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-    <script>
-        const canvas = document.getElementById('particle-canvas');
-        const ctx = canvas.getContext('2d');
+    <header class="hero">
+        <div class="hero-inner">
+            <img class="hero-photo" src="images/me.jpg" alt="Portrait of Jacopo Niccolai">
+            <div class="hero-text">
+                <p class="eyebrow">Portfolio</p>
+                <h1>Jacopo<br>Niccolai</h1>
+                <div class="tick" aria-hidden="true"><span></span><i></i></div>
+                <p class="hero-role">Machine Learning Engineer <a href="https://tuboolar.com/" target="_blank" rel="noopener">@tuboolar</a></p>
+                <p class="hero-bio">
+                    I build computer-vision AI for industrial production, and I teach kids that
+                    robots are something you make, not just something you watch. MSc in Artificial
+                    Intelligence &amp; Data Engineering from the University of Pisa (110/110 cum laude),
+                    Vice President of the STEAM-education association Scienza Ludica.
+                </p>
+                <div class="social-links">
+                    <a href="https://github.com/JacopoNiccolai" target="_blank" rel="noopener" title="GitHub"><i class="fab fa-github"></i></a>
+                    <a href="https://linkedin.com/in/jacoponiccolai" target="_blank" rel="noopener" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="mailto:jacoponiccolai13@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+                </div>
+            </div>
+        </div>
+        <a class="scroll-hint" href="#experience" aria-label="Scroll to experience">&#8595;</a>
+    </header>
 
-        let particles = [];
-        const numParticles = 100;
-        const maxDistance = 120;
+    <main>
+        <section id="experience" class="section" data-badge="experience">
+            <p class="eyebrow">Experience</p>
+            <div class="tick" aria-hidden="true"><span></span><i></i></div>
 
-        function setCanvasSize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        setCanvasSize();
-        window.addEventListener('resize', setCanvasSize);
+            <div class="brand-grid">
+                <article class="brand-card brand-tuboolar">
+                    <img class="brand-logo" src="images/tuboolar-logo.svg" alt="tuboolar logo">
+                    <h3>Machine Learning Engineer</h3>
+                    <p class="brand-meta">Jan 2026 — present &middot; Lucca</p>
+                    <p class="brand-desc">
+                        Computer vision for industrial production — AI tailored to real factory
+                        workflows, from defect detection to R&amp;D automation.
+                    </p>
+                    <p class="brand-tagline">Simply works.</p>
+                    <div class="brand-foot">
+                        <a class="brand-link" href="https://tuboolar.com/" target="_blank" rel="noopener">tuboolar.com <span aria-hidden="true">&#8599;</span></a>
+                        <a class="brand-mail" href="mailto:jacopo.niccolai@tuboolar.com">jacopo.niccolai@tuboolar.com</a>
+                    </div>
+                </article>
 
-        class Particle {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.speedX = Math.random() * 0.5 - 0.25;
-                this.speedY = Math.random() * 0.5 - 0.25;
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
+                <article class="brand-card brand-sl">
+                    <span class="sl-strip" aria-hidden="true"></span>
+                    <img class="brand-logo" src="images/scienzaludica-logo.svg" alt="Scienza Ludica logo">
+                    <h3>Vice President &amp; Tutor</h3>
+                    <p class="brand-meta">2019 — present &middot; Pistoia</p>
+                    <p class="brand-desc">
+                        Robotics, coding, AI and STEAM workshops for school children. Vice President
+                        of the association since June 2025.
+                    </p>
+                    <p class="brand-tagline">Science, but playful.</p>
+                    <div class="brand-foot">
+                        <a class="brand-link" href="https://scienzaludica.org/" target="_blank" rel="noopener">scienzaludica.org <span aria-hidden="true">&#8599;</span></a>
+                    </div>
+                </article>
+            </div>
 
-                if (this.x > canvas.width || this.x < 0) this.speedX = -this.speedX;
-                if (this.y > canvas.height || this.y < 0) this.speedY = -this.speedY;
-            }
-            draw() {
-                ctx.fillStyle = 'rgba(0, 255, 255, 0.8)';
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
+            <ol class="timeline">
+                <li>
+                    <h3>Expert Trainer &amp; Tutor — Scuola Futura PNRR</h3>
+                    <p class="entry-meta">Nov 2024 — Jan 2025 &middot; Pistoia</p>
+                    <p>Workshops for primary-school teachers on using AI as a supportive tool to enhance teaching and integrate technology effectively.</p>
+                </li>
+                <li>
+                    <h3>Robotics Technician — CNR internship</h3>
+                    <p class="entry-meta">May — Sept 2017 &middot; Sesto Fiorentino</p>
+                    <p>Developed the &ldquo;L&eacute;vy Walks — Robotic Simulation&rdquo; project with biology and physics researchers at the National Research Council. Presented at Didacta Italia 2017.</p>
+                </li>
+                <li>
+                    <h3>Project Manager — First LEGO League World Championship <button id="egg-lego" class="egg-btn" title="A brick from St. Louis" aria-label="Hidden LEGO brick">&#129521;</button></h3>
+                    <p class="entry-meta">April 2015 &middot; St. Louis, Missouri, USA</p>
+                    <p>Led team &ldquo;2IBombi&rdquo; to win the national robotics and science competition, then represented Italy at the World Championship. Presented at Rome Maker Faire 2015.</p>
+                </li>
+            </ol>
+        </section>
 
-        function init() {
-            particles = [];
-            for (let i = 0; i < numParticles; i++) {
-                particles.push(new Particle());
-            }
-        }
-        init();
+        <section id="education" class="section" data-badge="education">
+            <p class="eyebrow">Education</p>
+            <div class="tick" aria-hidden="true"><span></span><i></i></div>
 
-        function connect() {
-            let opacity = 1;
-            for (let a = 0; a < particles.length; a++) {
-                for (let b = a; b < particles.length; b++) {
-                    const distance = Math.sqrt(
-                        Math.pow(particles[a].x - particles[b].x, 2) + 
-                        Math.pow(particles[a].y - particles[b].y, 2)
-                    );
-                    if (distance < maxDistance) {
-                        opacity = 1 - (distance / maxDistance);
-                        ctx.strokeStyle = `rgba(0, 255, 255, ${opacity})`;
-                        ctx.lineWidth = 0.5;
-                        ctx.beginPath();
-                        ctx.moveTo(particles[a].x, particles[a].y);
-                        ctx.lineTo(particles[b].x, particles[b].y);
-                        ctx.stroke();
-                    }
-                }
-            }
-        }
+            <div class="edu-card">
+                <h3>MSc — Artificial Intelligence &amp; Data Engineering</h3>
+                <p class="entry-meta">University of Pisa &middot; 2023 — 2025 &middot; <strong>110/110 cum laude</strong></p>
+                <p class="thesis">Thesis: &ldquo;A machine unlearning approach based on multi-objective loss function to forget samples in object detection&rdquo;</p>
+                <ul class="chips">
+                    <li>Machine Learning</li><li>Deep Learning</li><li>Computer Vision</li><li>Language Models</li><li>GenAI</li><li>Reinforcement Learning</li><li>Data Mining</li><li>NoSQL</li><li>Distributed Databases</li><li>IoT</li><li>Cloud Computing</li>
+                </ul>
+            </div>
+            <div class="edu-card">
+                <h3>BSc — Computer Engineering</h3>
+                <p class="entry-meta">University of Pisa &middot; 2018 — 2023 &middot; 100/110</p>
+                <p class="thesis">Thesis: &ldquo;Implementation and comparison of explainable machine learning approaches for the analysis of urban mobility&rdquo;</p>
+                <ul class="chips">
+                    <li>Python</li><li>C/C++</li><li>Java</li><li>SQL</li><li>Software Engineering</li><li>Web Programming</li><li>Computer Networks</li>
+                </ul>
+            </div>
+            <div class="edu-card">
+                <h3>High School Diploma — IT &amp; Telecommunications</h3>
+                <p class="entry-meta">I.T.T.S. &ldquo;S. Fedi — E. Fermi&rdquo;, Pistoia &middot; 2013 — 2018 &middot; 100/100</p>
+            </div>
+        </section>
 
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            connect();
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            requestAnimationFrame(animate);
-        }
+        <section id="projects" class="section" data-badge="projects">
+            <p class="eyebrow">Projects</p>
+            <div class="tick" aria-hidden="true"><span></span><i></i></div>
 
-        animate();
-    </script>
+            <div class="project-grid">
+                <article class="project-card">
+                    <h3>Interactive RAG</h3>
+                    <p class="entry-meta">Python</p>
+                    <p>Full Retrieval-Augmented Generation pipeline that lets you hold a conversation with Llama 3.2 3B about your own PDF documents.</p>
+                </article>
+                <article class="project-card">
+                    <h3>QuizGenAIrator</h3>
+                    <p class="entry-meta">Generative AI</p>
+                    <p>Generates quizzes from study materials and manuals using generative AI. Presented at Internet Festival 2023 in Pisa.</p>
+                </article>
+                <article class="project-card">
+                    <h3>Sonic Routes</h3>
+                    <p class="entry-meta">Kotlin &middot; Flask &middot; OpenStreetMap</p>
+                    <p>Mobile app helping cyclists and pedestrians find quiet routes in Pisa through a crowdsourced noise map.</p>
+                </article>
+                <article class="project-card">
+                    <h3>Erasmus Nest</h3>
+                    <p class="entry-meta">Java</p>
+                    <p>Airbnb-like accommodation platform designed for Erasmus students, with built-in social features.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="highlights" class="section" data-badge="highlights">
+            <p class="eyebrow">Highlights</p>
+            <div class="tick" aria-hidden="true"><span></span><i></i></div>
+
+            <ul class="highlight-list">
+                <li>
+                    <h3>Text Mining for Innovation Management — Summer School</h3>
+                    <p class="entry-meta">Pisa &middot; July 2025</p>
+                    <p>Presented &ldquo;Generative AI in Business Strategy — Testing into the Wild&rdquo;, a methodology for introducing GenAI into corporate decision-making.</p>
+                </li>
+                <li>
+                    <h3>Speaker — &ldquo;Supercharged by AI&rdquo;</h3>
+                    <p class="entry-meta">Biblioteca San Giorgio, Pistoia &middot; Feb 2025</p>
+                    <p>Opening talk on the limits and potential of generative AI for conscious use.</p>
+                </li>
+                <li>
+                    <h3>Speaker — Internet Festival</h3>
+                    <p class="entry-meta">Pisa &middot; Oct 2023</p>
+                    <p>Presented QuizGenAIrator, a generative-AI quiz builder for study materials.</p>
+                </li>
+                <li>
+                    <h3>Best Team Award — Impresa in Azione, JA Italia</h3>
+                    <p class="entry-meta">Pisa &middot; May 2018</p>
+                    <p>Public-transport tracking app awarded by JA Italia and showcased at Didacta Italia 2018 in Florence.</p>
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="tick" aria-hidden="true"><span></span><i></i></div>
+        <p class="footer-langs">Italian <em>native</em> &middot; English <em>professional</em> &middot; Spanish <em>basic</em></p>
+        <p class="footer-hobbies">
+            Sports &amp; outdoors &middot; curious traveler &middot;
+            <button id="egg-guitar" class="egg-btn" title="Play something" aria-label="Hidden campfire guitar">campfire guitarist &#127928;</button>
+        </p>
+        <div class="social-links">
+            <a href="https://github.com/JacopoNiccolai" target="_blank" rel="noopener" title="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://linkedin.com/in/jacoponiccolai" target="_blank" rel="noopener" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            <a href="mailto:jacoponiccolai13@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
+        </div>
+        <p class="footer-copy">&copy; 2026 Jacopo Niccolai &middot; <span class="footer-hint">psst — 7 discoveries are hidden on this page</span></p>
+    </footer>
+
+    <script src="js/main.js"></script>
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-VME1QC5SSM"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-    
+
       gtag('config', 'G-VME1QC5SSM');
     </script>
 </body>

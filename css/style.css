@@ -152,7 +152,8 @@ h1, h2, h3 { line-height: 1.2; }
     font-size: 1.6rem;
     transition: color 0.25s ease, transform 0.25s ease;
 }
-.icon-komoot {
+.icon-komoot,
+.icon-duolingo {
     width: 1.45rem;
     height: 1.45rem;
     display: block;

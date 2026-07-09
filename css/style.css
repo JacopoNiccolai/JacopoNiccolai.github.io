@@ -684,6 +684,7 @@ html.fine-cursor * { cursor: none !important; }
     background: linear-gradient(90deg, #00e5ff, #7c6cff, #f04d94, #f4941c);
 }
 .alive .tick i { background: #ffd23c; }
+.alive .hero-photo { filter: none; }
 .alive .hud-star { color: #ffd23c; }
 .alive .hud { border-color: rgba(255, 210, 60, 0.45); }
 .alive #cursor { animation: hue 9s linear infinite; }

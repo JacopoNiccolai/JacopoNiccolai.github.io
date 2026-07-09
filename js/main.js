@@ -201,9 +201,11 @@
     var toastTimer = null;
 
     /* "alive" mode: unlocked at 13/13, breaks the monochrome rule */
+    var heroPhoto = document.querySelector('.hero-photo');
     function setAlive(on) {
         aliveMode = on;
         document.documentElement.classList.toggle('alive', on);
+        heroPhoto.src = on ? 'images/me0.jpg' : 'images/me.jpg';
         themeToggle.textContent = on ? 'back to ink' : 'come alive';
         try {
             localStorage.setItem('jn-alive', on ? '1' : '0');

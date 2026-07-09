@@ -22,12 +22,21 @@
     <div id="hud-panel" class="hud-panel" hidden>
         <p class="hud-title">Discoveries</p>
         <ul id="badge-list"></ul>
+        <button id="theme-toggle" class="theme-toggle" hidden>back to ink</button>
     </div>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <div id="cursor" aria-hidden="true" hidden>
+        <span class="c-corner c-tl"></span><span class="c-corner c-tr"></span>
+        <span class="c-corner c-bl"></span><span class="c-corner c-br"></span>
+        <span class="c-dot"></span>
+        <span class="c-label"></span>
+    </div>
 
     <header class="hero">
         <div class="hero-inner">
-            <img class="hero-photo" src="images/me.jpg" alt="Portrait of Jacopo Niccolai">
+            <button id="egg-photo" class="egg-photo" aria-label="Portrait of Jacopo Niccolai (it likes attention)">
+                <img class="hero-photo" src="images/me.jpg" alt="Portrait of Jacopo Niccolai">
+            </button>
             <div class="hero-text">
                 <p class="eyebrow">Portfolio</p>
                 <h1>Jacopo<br>Niccolai</h1>
@@ -42,6 +51,7 @@
                 <div class="social-links">
                     <a href="https://github.com/JacopoNiccolai" target="_blank" rel="noopener" title="GitHub"><i class="fab fa-github"></i></a>
                     <a href="https://linkedin.com/in/jacoponiccolai" target="_blank" rel="noopener" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://x.com/jniccolai13" target="_blank" rel="noopener" title="X"><i class="fab fa-x-twitter"></i></a>
                     <a href="mailto:jacoponiccolai13@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
                     <a href="https://www.komoot.com/user/1695475739877" target="_blank" rel="noopener" title="Komoot"><svg class="icon-komoot" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9.8 14.829l2.2-3.43 2.2 3.43 5.962 5.962A11.946 11.946 0 0 1 12 24c-3.043 0-5.935-1.14-8.162-3.209zM0 12C0 5.385 5.385 0 12 0c6.62 0 12 5.385 12 12 0 2.663-.855 5.175-2.469 7.284l-6.018-6.018c.15-.412.226-.839.226-1.27A3.743 3.743 0 0 0 12 8.257a3.743 3.743 0 0 0-3.739 3.739c0 .431.075.858.226 1.27l-6.018 6.018A11.865 11.865 0 0 1 0 12Z"/></svg></a>
                 </div>
@@ -69,6 +79,7 @@
                         <a class="brand-link" href="https://tuboolar.com/" target="_blank" rel="noopener">tuboolar.com <span aria-hidden="true">&#8599;</span></a>
                         <a class="brand-mail" href="mailto:jacopo.niccolai@tuboolar.com">jacopo.niccolai@tuboolar.com</a>
                     </div>
+                    <button id="egg-defect" class="defect-dot" aria-label="Hidden defect"></button>
                 </article>
 
                 <article class="brand-card brand-sl">
@@ -80,7 +91,7 @@
                         Robotics, coding, AI and STEAM workshops for school children. Vice President
                         of the association since June 2025.
                     </p>
-                    <p class="brand-tagline">Science, but playful.</p>
+                    <p class="brand-tagline"><button id="egg-sl" class="egg-btn">Science, but playful.</button></p>
                     <div class="brand-foot">
                         <a class="brand-link" href="https://scienzaludica.org/" target="_blank" rel="noopener">scienzaludica.org <span aria-hidden="true">&#8599;</span></a>
                         <a class="brand-mail" href="mailto:j.niccolai@scienzaludica.org">j.niccolai@scienzaludica.org</a>
@@ -113,7 +124,7 @@
 
             <div class="edu-card">
                 <h3>MSc &middot; Artificial Intelligence &amp; Data Engineering</h3>
-                <p class="entry-meta">University of Pisa &middot; 2023 - 2025 &middot; <strong>110/110 cum laude</strong></p>
+                <p class="entry-meta">University of Pisa &middot; 2023 - 2025 &middot; <button id="egg-laude" class="egg-btn"><strong>110/110 cum laude</strong></button></p>
                 <p class="thesis">Thesis: &ldquo;A machine unlearning approach based on multi-objective loss function to forget samples in object detection&rdquo;</p>
                 <ul class="chips">
                     <li>Machine Learning</li><li>Deep Learning</li><li>Computer Vision</li><li>Language Models</li><li>GenAI</li><li>Reinforcement Learning</li><li>Data Mining</li><li>NoSQL</li><li>Distributed Databases</li><li>IoT</li><li>Cloud Computing</li>
@@ -200,10 +211,11 @@
         <div class="social-links">
             <a href="https://github.com/JacopoNiccolai" target="_blank" rel="noopener" title="GitHub"><i class="fab fa-github"></i></a>
             <a href="https://linkedin.com/in/jacoponiccolai" target="_blank" rel="noopener" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            <a href="https://x.com/jniccolai13" target="_blank" rel="noopener" title="X"><i class="fab fa-x-twitter"></i></a>
             <a href="mailto:jacoponiccolai13@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
             <a href="https://www.komoot.com/user/1695475739877" target="_blank" rel="noopener" title="Komoot"><svg class="icon-komoot" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9.8 14.829l2.2-3.43 2.2 3.43 5.962 5.962A11.946 11.946 0 0 1 12 24c-3.043 0-5.935-1.14-8.162-3.209zM0 12C0 5.385 5.385 0 12 0c6.62 0 12 5.385 12 12 0 2.663-.855 5.175-2.469 7.284l-6.018-6.018c.15-.412.226-.839.226-1.27A3.743 3.743 0 0 0 12 8.257a3.743 3.743 0 0 0-3.739 3.739c0 .431.075.858.226 1.27l-6.018 6.018A11.865 11.865 0 0 1 0 12Z"/></svg></a>
         </div>
-        <p class="footer-copy">&copy; 2026 Jacopo Niccolai &middot; <span class="footer-hint">psst: 7 discoveries are hidden on this page</span></p>
+        <p class="footer-copy">&copy; 2026 Jacopo Niccolai &middot; <span class="footer-hint">psst: <button id="egg-13" class="egg-btn">13</button> discoveries are hidden on this page</span></p>
     </footer>
 
     <script src="js/main.js"></script>

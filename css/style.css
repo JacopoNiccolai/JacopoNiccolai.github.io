@@ -449,12 +449,56 @@ main, .footer {
 .egg-btn {
     font: inherit;
     color: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
     background: none;
     border: none;
     padding: 0;
     cursor: pointer;
 }
 .egg-btn:hover { color: var(--accent); }
+.brand-tagline .egg-btn:hover { color: inherit; opacity: 0.75; }
+
+.egg-photo {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    border-radius: 50%;
+    flex-shrink: 0;
+    line-height: 0;
+}
+.egg-photo .hero-photo { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+.egg-photo:hover .hero-photo { transform: scale(1.03); }
+.hero-photo.cheese { animation: cheese 0.8s ease; }
+@keyframes cheese {
+    0% { transform: rotate(0); box-shadow: none; }
+    30% { transform: rotate(-4deg) scale(1.06); box-shadow: 0 0 0 6px rgba(0, 229, 255, 0.35); }
+    60% { transform: rotate(3deg) scale(1.04); }
+    100% { transform: rotate(0); box-shadow: none; }
+}
+
+/* the hidden "defect": one off pixel in the tuboolar card */
+.defect-dot {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    width: 16px;
+    height: 16px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+}
+.defect-dot::before {
+    content: "";
+    position: absolute;
+    inset: 4.5px;
+    border-radius: 50%;
+    background: var(--tub-red);
+    opacity: 0.55;
+}
+.defect-dot:hover::before { opacity: 1; box-shadow: 0 0 8px var(--tub-red); }
 
 /* ---------------------------------------------------------------
    HUD + toast
@@ -520,6 +564,22 @@ main, .footer {
 .hud-panel li::before { content: "\2606\00a0"; }
 .hud-panel li small { display: block; color: var(--faint); font-weight: 300; }
 
+.theme-toggle {
+    margin-top: 0.8rem;
+    font-family: inherit;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text);
+    background: none;
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    padding: 0.35rem 0.9rem;
+    cursor: pointer;
+}
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
 .toast {
     position: fixed;
     bottom: 1.6rem;
@@ -541,6 +601,90 @@ main, .footer {
 .toast.show {
     transform: translate(-50%, 0);
     visibility: visible;
+}
+
+/* ---------------------------------------------------------------
+   Detection-crosshair cursor (fine pointers only; .fine-cursor is
+   set by main.js)
+   --------------------------------------------------------------- */
+html.fine-cursor,
+html.fine-cursor * { cursor: none !important; }
+
+#cursor {
+    position: fixed;
+    z-index: 100;
+    pointer-events: none;
+    left: 0;
+    top: 0;
+    width: 26px;
+    height: 26px;
+    transition: left 0.09s linear, top 0.09s linear,
+                width 0.18s ease, height 0.18s ease;
+}
+#cursor .c-corner {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border: 0 solid var(--accent);
+}
+#cursor .c-tl { left: 0; top: 0; border-left-width: 1.5px; border-top-width: 1.5px; }
+#cursor .c-tr { right: 0; top: 0; border-right-width: 1.5px; border-top-width: 1.5px; }
+#cursor .c-bl { left: 0; bottom: 0; border-left-width: 1.5px; border-bottom-width: 1.5px; }
+#cursor .c-br { right: 0; bottom: 0; border-right-width: 1.5px; border-bottom-width: 1.5px; }
+#cursor .c-dot {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 3px;
+    height: 3px;
+    margin: -1.5px 0 0 -1.5px;
+    border-radius: 50%;
+    background: var(--accent);
+}
+#cursor .c-label {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+#cursor.locked .c-label { opacity: 1; }
+#cursor.locked .c-dot { opacity: 0; }
+#cursor.hidden { opacity: 0; }
+
+/* ---------------------------------------------------------------
+   "Alive" mode: the reward for 13/13, monochrome rule breaks
+   --------------------------------------------------------------- */
+.alive .hero-text h1 {
+    background: linear-gradient(100deg,
+        #00e5ff 0%, #7c6cff 22%, #f04d94 44%,
+        #f4941c 62%, #79d93c 82%, #00e5ff 100%);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: sheen 7s linear infinite;
+}
+@keyframes sheen {
+    from { background-position: 0% 50%; }
+    to { background-position: 300% 50%; }
+}
+.alive .tick span {
+    background: linear-gradient(90deg, #00e5ff, #7c6cff, #f04d94, #f4941c);
+}
+.alive .tick i { background: #ffd23c; }
+.alive .hud-star { color: #ffd23c; }
+.alive .hud { border-color: rgba(255, 210, 60, 0.45); }
+.alive #cursor { animation: hue 9s linear infinite; }
+@keyframes hue {
+    from { filter: hue-rotate(0deg); }
+    to { filter: hue-rotate(360deg); }
 }
 
 /* ---------------------------------------------------------------
@@ -569,4 +713,7 @@ main, .footer {
         transition: none;
     }
     .brand-card, .project-card, .chips li, .social-links a { transition: none; }
+    .alive .hero-text h1 { animation: none; }
+    .alive #cursor { animation: none; }
+    .hero-photo.cheese { animation: none; }
 }

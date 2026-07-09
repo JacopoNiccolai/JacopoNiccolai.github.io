@@ -23,12 +23,16 @@
     setCanvasSize();
     window.addEventListener('resize', setCanvasSize);
 
+    var aliveMode = false;
+    var frame = 0;
+
     function Particle() {
         this.x = Math.random() * canvas.width;
         this.y = Math.random() * canvas.height;
         this.size = Math.random() * 2 + 0.5;
         this.vx = Math.random() * 0.5 - 0.25;
         this.vy = Math.random() * 0.5 - 0.25;
+        this.hue = Math.random() * 360;
     }
     Particle.prototype.update = function () {
         // gentle repulsion from the cursor
@@ -53,8 +57,16 @@
         var dy = this.y - mouse.y;
         return dx * dx + dy * dy < mouse.radius * mouse.radius;
     };
+    Particle.prototype.color = function (alpha) {
+        if (aliveMode) {
+            return 'hsla(' + ((this.hue + frame * 0.25) % 360) + ', 85%, 65%, ' + alpha + ')';
+        }
+        return this.nearMouse()
+            ? 'rgba(0, 229, 255, ' + alpha + ')'
+            : 'rgba(236, 236, 236, ' + alpha * 0.6 + ')';
+    };
     Particle.prototype.draw = function () {
-        ctx.fillStyle = this.nearMouse() ? 'rgba(0, 229, 255, 0.9)' : 'rgba(236, 236, 236, 0.55)';
+        ctx.fillStyle = this.color(0.9);
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
         ctx.fill();
@@ -87,10 +99,14 @@
                 var dist = Math.sqrt(dx * dx + dy * dy);
                 if (dist < LINK_DIST) {
                     var opacity = (1 - dist / LINK_DIST) * 0.5;
-                    var cyan = particles[a].nearMouse() && particles[b].nearMouse();
-                    ctx.strokeStyle = cyan
-                        ? 'rgba(0, 229, 255, ' + opacity + ')'
-                        : 'rgba(236, 236, 236, ' + opacity * 0.5 + ')';
+                    if (aliveMode) {
+                        ctx.strokeStyle = particles[a].color(opacity * 0.8);
+                    } else {
+                        var cyan = particles[a].nearMouse() && particles[b].nearMouse();
+                        ctx.strokeStyle = cyan
+                            ? 'rgba(0, 229, 255, ' + opacity + ')'
+                            : 'rgba(236, 236, 236, ' + opacity * 0.5 + ')';
+                    }
                     ctx.lineWidth = 0.5;
                     ctx.beginPath();
                     ctx.moveTo(particles[a].x, particles[a].y);
@@ -112,7 +128,9 @@
                 burstParticles.splice(i, 1);
                 continue;
             }
-            ctx.fillStyle = 'rgba(0, 229, 255, ' + (p.life / p.maxLife) + ')';
+            ctx.fillStyle = aliveMode
+                ? 'hsla(' + ((p.hue || 0) + frame) % 360 + ', 85%, 65%, ' + (p.life / p.maxLife) + ')'
+                : 'rgba(0, 229, 255, ' + (p.life / p.maxLife) + ')';
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
             ctx.fill();
@@ -131,6 +149,7 @@
                 vx: Math.cos(angle) * speed,
                 vy: Math.sin(angle) * speed - 2,
                 size: Math.random() * 2.5 + 1,
+                hue: Math.random() * 360,
                 life: 90 + Math.random() * 40,
                 maxLife: 130
             });
@@ -138,6 +157,7 @@
     }
 
     function animate() {
+        frame++;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         connect();
         particles.forEach(function (p) { p.update(); p.draw(); });
@@ -156,7 +176,13 @@
         { id: 'highlights', name: 'Trophy room entered', hint: 'Read through the highlights section' },
         { id: 'konami', name: 'Old-school gamer', hint: 'Try a classic cheat code (keyboard)' },
         { id: 'guitar', name: 'Campfire session', hint: 'Something acoustic hides in the footer' },
-        { id: 'lego', name: 'Brick by brick', hint: 'A little brick made it back from St. Louis' }
+        { id: 'lego', name: 'Brick by brick', hint: 'A little brick made it back from St. Louis' },
+        { id: 'photo', name: 'Say cheese', hint: 'The portrait likes attention' },
+        { id: 'defect', name: 'Defect detected', hint: 'Quality control: one pixel in the tuboolar card is off' },
+        { id: 'laude', name: 'Cum laude', hint: 'Honors deserve a click' },
+        { id: 'slfun', name: 'Playful scientist', hint: 'Playfulness is clickable' },
+        { id: 'deep', name: 'Deep diver', hint: 'Touch the very bottom of the page' },
+        { id: 'lucky13', name: 'Lucky thirteen', hint: 'A special number hides in the fine print' }
     ];
     var STORE_KEY = 'jn-discoveries';
     var unlocked;
@@ -171,7 +197,21 @@
     var hudPanel = document.getElementById('hud-panel');
     var badgeList = document.getElementById('badge-list');
     var toast = document.getElementById('toast');
+    var themeToggle = document.getElementById('theme-toggle');
     var toastTimer = null;
+
+    /* "alive" mode: unlocked at 13/13, breaks the monochrome rule */
+    function setAlive(on) {
+        aliveMode = on;
+        document.documentElement.classList.toggle('alive', on);
+        themeToggle.textContent = on ? 'back to ink' : 'come alive';
+        try {
+            localStorage.setItem('jn-alive', on ? '1' : '0');
+        } catch (e) { /* private mode */ }
+    }
+    themeToggle.addEventListener('click', function () {
+        setAlive(!aliveMode);
+    });
 
     function count() {
         return BADGES.filter(function (b) { return unlocked[b.id]; }).length;
@@ -216,8 +256,10 @@
         void hud.offsetWidth; /* restart animation */
         hud.classList.add('pulse');
         if (count() === BADGES.length) {
-            showToast('★ Full explorer: you found everything. The particles salute you!');
+            showToast('★ 13/13: the page comes alive!');
             celebrate();
+            themeToggle.hidden = false;
+            setAlive(true);
         } else {
             showToast('★ Discovery: ' + badge.name + ' (' + count() + '/' + BADGES.length + ')');
         }
@@ -237,6 +279,18 @@
 
     renderHud();
 
+    /* restore alive mode from a previous full run */
+    if (count() === BADGES.length) {
+        themeToggle.hidden = false;
+        var alivePref;
+        try {
+            alivePref = localStorage.getItem('jn-alive');
+        } catch (e) {
+            alivePref = null;
+        }
+        setAlive(alivePref !== '0');
+    }
+
     /* staggered scroll reveal: each card/entry slides in as it enters the viewport */
     var revealTargets = document.querySelectorAll(
         '.section .eyebrow, .section .tick, .brand-card, .timeline li, ' +
@@ -251,11 +305,10 @@
     });
 
     if ('IntersectionObserver' in window) {
+        /* reveals replay: elements animate in again on every scroll pass */
         var revealObserver = new IntersectionObserver(function (entries) {
             entries.forEach(function (entry) {
-                if (!entry.isIntersecting) return;
-                entry.target.classList.add('revealed');
-                revealObserver.unobserve(entry.target);
+                entry.target.classList.toggle('revealed', entry.isIntersecting);
             });
         }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
         revealTargets.forEach(function (el) { revealObserver.observe(el); });
@@ -282,6 +335,84 @@
     document.getElementById('egg-lego').addEventListener('click', function () {
         unlock('lego');
     });
+    document.getElementById('egg-photo').addEventListener('click', function () {
+        var photo = document.querySelector('.hero-photo');
+        photo.classList.remove('cheese');
+        void photo.offsetWidth;
+        photo.classList.add('cheese');
+        unlock('photo');
+    });
+    document.getElementById('egg-defect').addEventListener('click', function () {
+        unlock('defect');
+    });
+    document.getElementById('egg-laude').addEventListener('click', function () {
+        unlock('laude');
+    });
+    document.getElementById('egg-sl').addEventListener('click', function () {
+        unlock('slfun');
+    });
+    document.getElementById('egg-13').addEventListener('click', function () {
+        unlock('lucky13');
+    });
+    window.addEventListener('scroll', function () {
+        if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
+            unlock('deep');
+        }
+    }, { passive: true });
+
+    /* ------------------------------------------------------------
+       Detection-crosshair cursor (desktop fine pointers only)
+       ------------------------------------------------------------ */
+    var cursorEl = document.getElementById('cursor');
+    if (window.matchMedia('(pointer: fine)').matches && !reducedMotion) {
+        document.documentElement.classList.add('fine-cursor');
+        cursorEl.hidden = false;
+        cursorEl.classList.add('hidden');
+
+        var cursorLabel = cursorEl.querySelector('.c-label');
+        var hoverTarget = null;
+        var FREE_SIZE = 26;
+        var PAD = 6;
+
+        function labelFor(el) {
+            var kind;
+            if (el.id && el.id.indexOf('egg-') === 0) kind = 'anomaly';
+            else if (el.id === 'hud' || el.id === 'theme-toggle' || hudPanel.contains(el)) kind = 'ui';
+            else if (el.href && el.href.indexOf('mailto:') === 0) kind = 'mail';
+            else if (el.tagName === 'A') kind = 'link';
+            else kind = 'ui';
+            /* stable pseudo-confidence per element */
+            var s = (el.id || el.href || el.textContent || '').slice(0, 24);
+            var h = 0;
+            for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 997;
+            return kind + ' 0.' + (90 + (h % 10));
+        }
+
+        document.addEventListener('mousemove', function (e) {
+            cursorEl.classList.remove('hidden');
+            var t = e.target.closest ? e.target.closest('a, button') : null;
+            if (t !== hoverTarget) {
+                hoverTarget = t;
+                cursorEl.classList.toggle('locked', !!t);
+                if (t) cursorLabel.textContent = labelFor(t);
+            }
+            if (hoverTarget) {
+                var r = hoverTarget.getBoundingClientRect();
+                cursorEl.style.left = (r.left - PAD) + 'px';
+                cursorEl.style.top = (r.top - PAD) + 'px';
+                cursorEl.style.width = (r.width + PAD * 2) + 'px';
+                cursorEl.style.height = (r.height + PAD * 2) + 'px';
+            } else {
+                cursorEl.style.left = (e.clientX - FREE_SIZE / 2) + 'px';
+                cursorEl.style.top = (e.clientY - FREE_SIZE / 2) + 'px';
+                cursorEl.style.width = FREE_SIZE + 'px';
+                cursorEl.style.height = FREE_SIZE + 'px';
+            }
+        });
+        document.addEventListener('mouseleave', function () {
+            cursorEl.classList.add('hidden');
+        });
+    }
 
     var KONAMI = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
     var konamiPos = 0;

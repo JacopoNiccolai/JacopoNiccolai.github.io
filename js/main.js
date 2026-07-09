@@ -137,10 +137,10 @@
         }
     }
 
-    function celebrate() {
+    function celebrate(originX, originY) {
         if (reducedMotion) return;
-        var cx = canvas.width / 2;
-        var cy = canvas.height / 2;
+        var cx = typeof originX === 'number' ? originX : canvas.width / 2;
+        var cy = typeof originY === 'number' ? originY : canvas.height / 2;
         for (var i = 0; i < 140; i++) {
             var angle = Math.random() * Math.PI * 2;
             var speed = Math.random() * 6 + 2;
@@ -206,6 +206,7 @@
         aliveMode = on;
         document.documentElement.classList.toggle('alive', on);
         heroPhoto.src = on ? 'images/me0.jpg' : 'images/me.jpg';
+        heroPhoto.classList.toggle('photo-alive', on);
         themeToggle.textContent = on ? 'back to ink' : 'come alive';
         try {
             localStorage.setItem('jn-alive', on ? '1' : '0');
@@ -214,6 +215,43 @@
     themeToggle.addEventListener('click', function () {
         setAlive(!aliveMode);
     });
+
+    /* 13/13 finale: scroll home, spin the portrait, morph to alive */
+    function playFinale() {
+        themeToggle.hidden = false;
+        if (reducedMotion) {
+            setAlive(true);
+            return;
+        }
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setTimeout(function () {
+            heroPhoto.classList.add('finale-spin');
+        }, 1000);
+        setTimeout(function () {
+            /* photo swaps at the blur peak, mid-spin */
+            heroPhoto.src = 'images/me0.jpg';
+            heroPhoto.classList.add('photo-alive');
+        }, 1900);
+        setTimeout(function () {
+            /* spin settles: the constellation colors first */
+            aliveMode = true;
+        }, 2800);
+        setTimeout(function () {
+            /* then the name gradient sweeps in */
+            document.documentElement.classList.add('alive-name');
+        }, 3200);
+        setTimeout(function () {
+            /* ticks, HUD and cursor follow: full alive */
+            setAlive(true);
+            document.documentElement.classList.remove('alive-name');
+            heroPhoto.classList.remove('finale-spin');
+        }, 3600);
+        setTimeout(function () {
+            /* burst erupts from the portrait */
+            var r = heroPhoto.getBoundingClientRect();
+            celebrate(r.left + r.width / 2, r.top + r.height / 2);
+        }, 4000);
+    }
 
     function count() {
         return BADGES.filter(function (b) { return unlocked[b.id]; }).length;
@@ -259,9 +297,7 @@
         hud.classList.add('pulse');
         if (count() === BADGES.length) {
             showToast('★ 13/13: the page comes alive!');
-            celebrate();
-            themeToggle.hidden = false;
-            setAlive(true);
+            playFinale();
         } else {
             showToast('★ Discovery: ' + badge.name + ' (' + count() + '/' + BADGES.length + ')');
         }

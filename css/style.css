@@ -476,6 +476,14 @@ main, .footer {
 .egg-photo .hero-photo { transition: transform 0.3s ease, box-shadow 0.3s ease; }
 .egg-photo:hover .hero-photo { transform: scale(1.03); }
 .hero-photo.cheese { animation: cheese 0.8s ease; }
+.hero-photo.photo-alive { filter: none; }
+.hero-photo.finale-spin { animation: finale-spin 1.8s cubic-bezier(0.55, 0, 0.35, 1); }
+@keyframes finale-spin {
+    0% { transform: rotate(0); filter: grayscale(1) blur(0); }
+    40% { filter: grayscale(1) blur(3px); }
+    60% { filter: grayscale(0) blur(3px); }
+    100% { transform: rotate(1080deg); filter: grayscale(0) blur(0); }
+}
 @keyframes cheese {
     0% { transform: rotate(0); box-shadow: none; }
     30% { transform: rotate(-4deg) scale(1.06); box-shadow: 0 0 0 6px rgba(0, 229, 255, 0.35); }
@@ -666,7 +674,8 @@ html.fine-cursor * { cursor: none !important; }
 /* ---------------------------------------------------------------
    "Alive" mode: the reward for 13/13, monochrome rule breaks
    --------------------------------------------------------------- */
-.alive .hero-text h1 {
+.alive .hero-text h1,
+.alive-name .hero-text h1 {
     background: linear-gradient(100deg,
         #00e5ff 0%, #7c6cff 22%, #f04d94 44%,
         #f4941c 62%, #79d93c 82%, #00e5ff 100%);
@@ -719,7 +728,9 @@ html.fine-cursor * { cursor: none !important; }
         transition: none;
     }
     .brand-card, .project-card, .chips li, .social-links a { transition: none; }
-    .alive .hero-text h1 { animation: none; }
+    .alive .hero-text h1,
+    .alive-name .hero-text h1 { animation: none; }
     .alive #cursor { animation: none; }
     .hero-photo.cheese { animation: none; }
+    .hero-photo.finale-spin { animation: none; }
 }
